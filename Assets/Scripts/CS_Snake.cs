@@ -20,6 +20,7 @@ public class CS_Snake : MonoBehaviour {
 	private List<GameObject> myAnchors = new List<GameObject> ();
 
 	private GameObject[] keyAnchors = new GameObject[10];
+	private bool[] keyAnchorsIsPulling = new bool[10];
 	[SerializeField] float keyPullLength = 3;
 
 	// Use this for initialization
@@ -98,10 +99,13 @@ public class CS_Snake : MonoBehaviour {
 		for (int i = 0; i < myAnchors.Count; i++) {
 //			myAnchors [i].GetComponent<SpringJoint2D> ().distance = 10f;
 			//myAnchors [i].GetComponent<SpriteRenderer> ().color = Color.black;
-
 			myAnchors [i].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
 				myAnchorMovement_Amplitude * Mathf.Sin (myAnchorMovement_Ratio * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
 
+			if (keyAnchorsIsPulling [i] == true) {
+				keyAnchors [i].GetComponent<SpringJoint2D> ().distance = 
+					keyAnchors [i].GetComponent<SpringJoint2D> ().distance - keyPullLength;
+			}
 //			Debug.Log (myAnchors [i].GetComponent<SpringJoint2D> ().distance);
 		}
 	}
@@ -111,10 +115,12 @@ public class CS_Snake : MonoBehaviour {
 	}
 
 	public void PullSpring (int g_key) {
-		keyAnchors [g_key].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY - keyPullLength;
+//		keyAnchors [g_key].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY - keyPullLength;
+		keyAnchorsIsPulling [g_key] = true;
 	}
 
 	public void ReleaseSpring (int g_key) {
-		keyAnchors [g_key].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY;
+//		keyAnchors [g_key].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY;
+		keyAnchorsIsPulling [g_key] = false;
 	}
 }
