@@ -20,6 +20,7 @@ public class Manager : MonoBehaviour {
 	public GameObject title;
 	public GameObject instructions;
 	public GameObject scorePiece;
+	public Text end;
 	public Text time;
 
 	//time stuff
@@ -38,15 +39,12 @@ public class Manager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		backgroundKeyboard.SetActive(false);
-		snake = GameObject.Find ("Snake");;
-		timeLeft = (float)timeMax;
+		snake = GameObject.Find ("Snake");
 		keyNum = new int[10]{1, 19, 4, 6, 7,8,10,11,12,-37};
 		currentBalls = new GameObject[numPlayers];
-		totalScore = 0;
 		score = new int[numPlayers];
-		for (int i=0; i<numPlayers; i++){
-			score[i]=0;
-		}
+		reset ();
+		timeLeft = 5f;//(float)timeMax;
 	}
 	
 	// Update is called once per frame
@@ -83,9 +81,35 @@ public class Manager : MonoBehaviour {
 			}
 			if (timeLeft < 0) {
 				mode = 2;
+				endGame ();
 			}
 		} else if (mode == 2) { //end
-			Debug.Log("game end");
+//			Debug.Log("game end");
+			if (Input.GetKeyDown (KeyCode.Space)) {
+				reset ();
+				end.text = "";
+				mode = 1; //start game
+				basket.SetActive (true);
+				for (int i = 0; i < numPlayers; i++) {
+					makeBall (i);
+				}
+			}
+		}
+	}
+
+	void reset(){
+		timeLeft = (float)timeMax;
+		totalScore = 0;
+		for (int i=0; i<numPlayers; i++){
+			score[i]=0;
+		}
+	}
+
+	void endGame(){
+		basket.SetActive (false);
+		end.text = "game over \n \n S P A C E  to play again";
+		for (int i = 0; i < currentBalls.Length; i++) {
+			Destroy (currentBalls [i]);
 		}
 	}
 
