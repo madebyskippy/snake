@@ -17,10 +17,10 @@ public class Ball : MonoBehaviour {
 		
 	}
 
-	public void setTeam(int t){
+	public void setTeam(int t, Color c){
 		team = t;
 		//set sprite color
-		GetComponent<SpriteRenderer>().color = new Color(0.2f*(team+1),0.5f*(team+1),0.5f*(team+1));
+		GetComponent<SpriteRenderer>().color = c;
 	}
 
 	void OnCollisionEnter2D(Collision2D collider){
