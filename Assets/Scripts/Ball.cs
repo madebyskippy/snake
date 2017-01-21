@@ -29,8 +29,10 @@ public class Ball : MonoBehaviour {
 			manager.SendMessage ("BallFell", team);
 		}
 		if (collider.gameObject.tag == "Basket") {
-			Debug.Log("hit basket");
-			manager.SendMessage ("scored", team);
+			if (transform.position.y > collider.gameObject.transform.position.y) {
+				Debug.Log("hit basket");
+				manager.SendMessage ("scored", team);
+			}
 		}
 	}
 }
