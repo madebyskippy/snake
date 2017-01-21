@@ -8,7 +8,13 @@ public class Manager : MonoBehaviour {
 
 	public int numPlayers = 2; //how many people are playing
 	public Color[] playerColors = new Color[2];
+	public int[] score;
+	public int totalScore;
 
+	GameObject snake;
+	public GameObject basket;
+
+	//ui stuff
 	int mode; //0=start screen; 1=game; 2=end screen
 	public GameObject backgroundKeyboard;
 	public GameObject title;
@@ -16,21 +22,31 @@ public class Manager : MonoBehaviour {
 	public GameObject scorePiece;
 	public Text time;
 
+	//time stuff
 	int timeMax = 60; //in seconds
 	float timeLeft;
 
+	//ball stuff
 	public GameObject ballSample;
 	public Vector3 ballStartPosition;
 	GameObject[] currentBalls;
 
+	//input stuff
 	public GameObject[] keys = new GameObject[10]; //for now
 	int[] keyNum;// = new int[5]; //keeps track of the letters (since it doesn't go in order)
 
 	// Use this for initialization
 	void Start () {
+		backgroundKeyboard.SetActive(false);
+		snake = GameObject.Find ("Snake");;
 		timeLeft = (float)timeMax;
 		keyNum = new int[10]{1, 19, 4, 6, 7,8,10,11,12,-37};
 		currentBalls = new GameObject[numPlayers];
+		totalScore = 0;
+		score = new int[numPlayers];
+		for (int i=0; i<numPlayers; i++){
+			score[i]=0;
+		}
 	}
 	
 	// Update is called once per frame
@@ -41,6 +57,7 @@ public class Manager : MonoBehaviour {
 				backgroundKeyboard.SetActive(false);
 				title.SetActive(false);
 				instructions.SetActive(false);
+				basket.SetActive (true);
 				for (int i = 0; i < numPlayers; i++) {
 					makeBall (i);
 				}
@@ -49,11 +66,14 @@ public class Manager : MonoBehaviour {
 			for (int i = 0; i < keys.Length; i++) {
 				if (Input.GetKeyDown (KeyCode.A + keyNum[i]-1)) {
 					//				keys [i].transform.localScale = new Vector3 (1.2f, 1.2f, 1f);
-					keys [i].GetComponent<Rigidbody2D> ().AddForce (new Vector2(0f,20000f));
+//					keys [i].GetComponent<Rigidbody2D> ().AddForce (new Vector2(0f,20000f));
+					snake.GetComponent<CS_Snake>().PullSpring(i);
 				}
-				//			if (Input.GetKeyUp (KeyCode.A + keyNum[i]-1)) {
-				//				keys [i].transform.localScale = new Vector3 (1f, 1f, 1f);
-				//			}
+				if (Input.GetKeyUp (KeyCode.A + keyNum[i]-1)) {
+//					keys [i].transform.localScale = new Vector3 (1f, 1f, 1f);
+
+					snake.GetComponent<CS_Snake>().ReleaseSpring(i);
+				}
 			}
 			timeLeft -= Time.deltaTime;
 			if (timeLeft < 10) {
@@ -78,5 +98,17 @@ public class Manager : MonoBehaviour {
 	public void BallFell(int team){
 		Destroy (currentBalls [team]);
 		makeBall (team);
+	}
+
+	public void scored(int team){
+		Destroy (currentBalls [team]);
+		makeBall (team);
+		score [team] += 1;
+		totalScore += 1;
+		Debug.Log(scorePiece.transform.eulerAngles.x);
+		Debug.Log(scorePiece.transform.eulerAngles.y);
+		Debug.Log(scorePiece.transform.eulerAngles.z);
+		float targetAngle =  180f * score [0] / totalScore;
+		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, targetAngle);
 	}
 }

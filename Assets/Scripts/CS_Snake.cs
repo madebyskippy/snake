@@ -69,7 +69,7 @@ public class CS_Snake : MonoBehaviour {
 		}
 
 		for (int i = 0; i < keyAnchors.Length; i++) {
-			keyAnchors [i] = myAnchors [(myAnchors.Count / keyAnchors.Length) * i + keyAnchors.Length / 2];
+			keyAnchors [i] = myAnchors [(myAnchors.Count / keyAnchors.Length) * i + (myAnchors.Count / keyAnchors.Length) / 2];
 		}
 
 //		Debug.Log (keyAnchors);

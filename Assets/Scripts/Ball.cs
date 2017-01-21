@@ -28,5 +28,9 @@ public class Ball : MonoBehaviour {
 			Debug.Log("hit stuff");
 			manager.SendMessage ("BallFell", team);
 		}
+		if (collider.gameObject.tag == "Basket") {
+			Debug.Log("hit basket");
+			manager.SendMessage ("scored", team);
+		}
 	}
 }
