@@ -14,12 +14,13 @@ public class CS_Snake : MonoBehaviour {
 	[SerializeField] GameObject myAnchorSample;
 	[SerializeField] float myAnchorDeltaPositionY;
 	[SerializeField] float myAnchorMovement_Amplitude = 1;
-	[SerializeField] float myAnchorMovement_Period = 2;
+	[SerializeField] float myAnchorMovement_Period = 12;
+	[SerializeField] float myAnchorMovement_Ratio = 2;
 
 	private List<GameObject> myAnchors = new List<GameObject> ();
 
-	private int[] keyNum = new int[10]{1, 19, 4, 6, 7,8,10,11,12,-37};
-	private GameObject[] keyAnchor = new GameObject[10];
+	private GameObject[] keyAnchors = new GameObject[10];
+	[SerializeField] float keyPullLength = 3;
 
 	// Use this for initialization
 	void Start () {
@@ -58,19 +59,19 @@ public class CS_Snake : MonoBehaviour {
 			t_Anchor.transform.position = myBodyParts [i].transform.position + myAnchorDeltaPositionY * Vector3.up;
 			t_Anchor.GetComponent<SpringJoint2D> ().connectedBody = myBodyParts [i].GetComponent<Rigidbody2D> ();
 			t_Anchor.GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY;
-			t_Anchor.GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
-				myAnchorMovement_Amplitude * Mathf.Sin (360 * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
+//			t_Anchor.GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
+//				myAnchorMovement_Amplitude * Mathf.Sin (360 * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
 
 //			t_Anchor.GetComponent<SpringJoint2D> ().connectedAnchor = Vector3.zero;
 
 			myAnchors.Add (t_Anchor);
 		}
 
-		for (int i = 0; i < keyAnchor.Length; i++) {
-			keyAnchor [i] = myAnchors [(myAnchors.Count / keyAnchor.Length) * i + keyAnchor.Length / 2];
+		for (int i = 0; i < keyAnchors.Length; i++) {
+			keyAnchors [i] = myAnchors [(myAnchors.Count / keyAnchors.Length) * i + keyAnchors.Length / 2];
 		}
 
-		Debug.Log (keyAnchor);
+//		Debug.Log (keyAnchors);
 
 	}
 	
@@ -99,7 +100,7 @@ public class CS_Snake : MonoBehaviour {
 			//myAnchors [i].GetComponent<SpriteRenderer> ().color = Color.black;
 
 			myAnchors [i].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
-				myAnchorMovement_Amplitude * Mathf.Sin (12 * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
+				myAnchorMovement_Amplitude * Mathf.Sin (myAnchorMovement_Ratio * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
 
 //			Debug.Log (myAnchors [i].GetComponent<SpringJoint2D> ().distance);
 		}
@@ -107,5 +108,13 @@ public class CS_Snake : MonoBehaviour {
 
 	public List<GameObject> GetBodyParts () {
 		return myBodyParts;
+	}
+
+	public void PullSpring (int g_key) {
+		keyAnchors [g_key].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY - keyPullLength;
+	}
+
+	public void ReleaseSpring (int g_key) {
+		keyAnchors [g_key].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY;
 	}
 }
