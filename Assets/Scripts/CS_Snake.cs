@@ -12,7 +12,7 @@ public class CS_Snake : MonoBehaviour {
 	private List<GameObject> myBodyConnections = new List<GameObject> ();
 
 	[SerializeField] GameObject myAnchorSample;
-	[SerializeField] Vector2 myAnchorDeltaPosition;
+	[SerializeField] float myAnchorDeltaPositionY;
 	private List<GameObject> myAnchors = new List<GameObject> ();
 
 	// Use this for initialization
@@ -49,8 +49,9 @@ public class CS_Snake : MonoBehaviour {
 
 		for (int i = 0; i < myBodyParts.Count; i++) {
 			GameObject t_Anchor = Instantiate (myAnchorSample, this.transform);
-			t_Anchor.transform.position = myBodyParts [i].transform.position + (Vector3)myAnchorDeltaPosition;
+			t_Anchor.transform.position = myBodyParts [i].transform.position + myAnchorDeltaPositionY * Vector3.up;
 			t_Anchor.GetComponent<SpringJoint2D> ().connectedBody = myBodyParts [i].GetComponent<Rigidbody2D> ();
+			t_Anchor.GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY;
 //			t_Anchor.GetComponent<SpringJoint2D> ().connectedAnchor = Vector3.zero;
 
 			myAnchors.Add (myAnchorSample);
