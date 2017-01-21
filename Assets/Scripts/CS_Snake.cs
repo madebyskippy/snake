@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class CS_Snake : MonoBehaviour {
 	[SerializeField] GameObject myBodySample;
-	[SerializeField] GameObject myBodyConnectionSample;
-	private List<GameObject> myBodyParts = new List<GameObject> ();
-	private List<GameObject> myBodyConnections = new List<GameObject> ();
 	[SerializeField] Vector2 myBodyDeltaPosition;
 	[SerializeField] int myBodyTotal = 100;
+	private List<GameObject> myBodyParts = new List<GameObject> ();
+
+	[SerializeField] GameObject myBodyConnectionSample;
+	private List<GameObject> myBodyConnections = new List<GameObject> ();
+
+	[SerializeField] GameObject myAnchorSample;
+	[SerializeField] Vector2 myAnchorDeltaPosition;
+	private List<GameObject> myAnchors = new List<GameObject> ();
+
 	// Use this for initialization
 	void Start () {
+
+		//Init Body
 
 		GameObject t_bodyPartOne = Instantiate (myBodySample, this.transform.position, Quaternion.identity) as GameObject;
 		t_bodyPartOne.transform.SetParent (this.transform);
@@ -29,11 +37,26 @@ public class CS_Snake : MonoBehaviour {
 			myBodyParts [i].GetComponent<SpringJoint2D> ().connectedBody = myBodyParts [i - 1].GetComponent<Rigidbody2D> ();
 		}
 
+		//Init Body Connection
+
 		for (int i = 1; i < myBodyParts.Count; i++) {
 			GameObject t_bodyConnection = Instantiate (myBodyConnectionSample, this.transform);
 			myBodyConnections.Add (t_bodyConnection);
 
 		}
+
+		//Init Anchor
+
+		for (int i = 0; i < myBodyParts.Count; i++) {
+			GameObject t_Anchor = Instantiate (myAnchorSample, this.transform);
+			t_Anchor.transform.position = myBodyParts [i].transform.position + (Vector3)myAnchorDeltaPosition;
+			t_Anchor.GetComponent<SpringJoint2D> ().connectedBody = myBodyParts [i].GetComponent<Rigidbody2D> ();
+//			t_Anchor.GetComponent<SpringJoint2D> ().connectedAnchor = Vector3.zero;
+
+			myAnchors.Add (myAnchorSample);
+		}
+
+
 	}
 	
 	// Update is called once per frame
