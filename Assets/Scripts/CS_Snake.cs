@@ -13,7 +13,13 @@ public class CS_Snake : MonoBehaviour {
 
 	[SerializeField] GameObject myAnchorSample;
 	[SerializeField] float myAnchorDeltaPositionY;
+	[SerializeField] float myAnchorMovement_Amplitude = 1;
+	[SerializeField] float myAnchorMovement_Period = 2;
+
 	private List<GameObject> myAnchors = new List<GameObject> ();
+
+	private int[] keyNum = new int[10]{1, 19, 4, 6, 7,8,10,11,12,-37};
+	private GameObject[] keyAnchor = new GameObject[10];
 
 	// Use this for initialization
 	void Start () {
@@ -52,16 +58,26 @@ public class CS_Snake : MonoBehaviour {
 			t_Anchor.transform.position = myBodyParts [i].transform.position + myAnchorDeltaPositionY * Vector3.up;
 			t_Anchor.GetComponent<SpringJoint2D> ().connectedBody = myBodyParts [i].GetComponent<Rigidbody2D> ();
 			t_Anchor.GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY;
+			t_Anchor.GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
+				myAnchorMovement_Amplitude * Mathf.Sin (360 * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
+
 //			t_Anchor.GetComponent<SpringJoint2D> ().connectedAnchor = Vector3.zero;
 
-			myAnchors.Add (myAnchorSample);
+			myAnchors.Add (t_Anchor);
 		}
 
+		for (int i = 0; i < keyAnchor.Length; i++) {
+			keyAnchor [i] = myAnchors [(myAnchors.Count / keyAnchor.Length) * i + keyAnchor.Length / 2];
+		}
+
+		Debug.Log (keyAnchor);
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		//Update Body Connection
+
 		for (int i = 0; i < myBodyConnections.Count; i++) {
 			Vector2 t_direction = myBodyParts [i].transform.position - myBodyParts [i + 1].transform.position;
 			Vector2 t_position = (myBodyParts [i].transform.position + myBodyParts [i + 1].transform.position) / 2;
@@ -73,5 +89,23 @@ public class CS_Snake : MonoBehaviour {
 			myBodyConnections [i].transform.rotation = t_quaternion;
 			myBodyConnections [i].transform.localScale = new Vector3 (1, t_direction.magnitude, 1);
 		}
+
+		UpdateAnchor ();
+	}
+
+	private void UpdateAnchor () {
+		for (int i = 0; i < myAnchors.Count; i++) {
+//			myAnchors [i].GetComponent<SpringJoint2D> ().distance = 10f;
+			//myAnchors [i].GetComponent<SpriteRenderer> ().color = Color.black;
+
+			myAnchors [i].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
+				myAnchorMovement_Amplitude * Mathf.Sin (12 * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
+
+//			Debug.Log (myAnchors [i].GetComponent<SpringJoint2D> ().distance);
+		}
+	}
+
+	public List<GameObject> GetBodyParts () {
+		return myBodyParts;
 	}
 }
