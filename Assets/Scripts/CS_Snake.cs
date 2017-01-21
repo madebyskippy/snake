@@ -102,11 +102,14 @@ public class CS_Snake : MonoBehaviour {
 			myAnchors [i].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
 				myAnchorMovement_Amplitude * Mathf.Sin (myAnchorMovement_Ratio * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
 
+//			Debug.Log (myAnchors [i].GetComponent<SpringJoint2D> ().distance);
+		}
+
+		for (int i = 0; i < keyAnchors.Length; i++) {
 			if (keyAnchorsIsPulling [i] == true) {
 				keyAnchors [i].GetComponent<SpringJoint2D> ().distance = 
 					keyAnchors [i].GetComponent<SpringJoint2D> ().distance - keyPullLength;
 			}
-//			Debug.Log (myAnchors [i].GetComponent<SpringJoint2D> ().distance);
 		}
 	}
 
