@@ -23,6 +23,9 @@ public class CS_Snake : MonoBehaviour {
 	private bool[] keyAnchorsIsPulling = new bool[10];
 	[SerializeField] float keyPullLength = 3;
 
+	[SerializeField] GameObject head;
+
+
 	// Use this for initialization
 	void Start () {
 
@@ -74,6 +77,9 @@ public class CS_Snake : MonoBehaviour {
 
 //		Debug.Log (keyAnchors);
 
+		// Head
+		head = Instantiate(head, myBodyParts[0].transform);
+		head.transform.localPosition = Vector3.zero;
 	}
 	
 	// Update is called once per frame
@@ -125,5 +131,7 @@ public class CS_Snake : MonoBehaviour {
 	public void ReleaseSpring (int g_key) {
 //		keyAnchors [g_key].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY;
 		keyAnchorsIsPulling [g_key] = false;
+
+
 	}
 }
