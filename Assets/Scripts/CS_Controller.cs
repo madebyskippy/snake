@@ -34,7 +34,7 @@ public class CS_Controller : MonoBehaviour {
 		Debug.Log ("Horizontal" + myControllerSuffix);
 
 		myAccumulation += Input.GetAxis ("Horizontal" + myControllerSuffix) * Time.deltaTime;
-		Debug.Log (myAccumulation);
+//		Debug.Log (myAccumulation);
 
 		for (int i = 0; i < 100; i++) {
 			if (myAccumulation > mySpeed) {
