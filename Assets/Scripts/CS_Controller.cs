@@ -38,6 +38,8 @@ public class CS_Controller : MonoBehaviour {
 
 		Input.GetAxisRaw ("Horizontal" + myControllerSuffix);
 
+		Input.GetAxisRaw ("Horizontal" + myControllerSuffix);
+
 		myAccumulation += Input.GetAxis ("Horizontal" + myControllerSuffix) * Time.deltaTime;
 //		Debug.Log (myAccumulation);
 
