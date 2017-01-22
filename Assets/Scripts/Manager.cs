@@ -127,7 +127,7 @@ public class Manager : MonoBehaviour {
 		for (int i=0; i<numPlayers; i++){
 			score[i]=0;
 		}
-		scorePie.transform.localScale = new Vector3 (1.1f, 1.1f, 1.1f);
+		scorePie.transform.localScale = new Vector3 (1.5f, 1.5f, 1.1f);
 	}
 
 	void startGame(){
@@ -186,9 +186,9 @@ public class Manager : MonoBehaviour {
 		float targetAngle =  180f * score [0] / totalScore;
 		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, targetAngle);
 		Sequence sq = DOTween.Sequence();
-		sq.Append(scorePie.transform.DOScale(new Vector2(1.4f, 1.4f), 0.15f));
-		sq.Append(scorePie.transform.DOScale(new Vector2(0.8f, 0.8f), 0.1f));
-		sq.Append(scorePie.transform.DOScale(new Vector2(1.4f, 1.4f), 0.1f));
+		sq.Append(scorePie.transform.DOScale(new Vector2(1.8f, 1.8f), 0.15f));
 		sq.Append(scorePie.transform.DOScale(new Vector2(1.1f, 1.1f), 0.1f));
+		sq.Append(scorePie.transform.DOScale(new Vector2(1.6f, 1.6f), 0.1f));
+		sq.Append(scorePie.transform.DOScale(new Vector2(1.5f, 1.5f), 0.1f));
 	}
 }
