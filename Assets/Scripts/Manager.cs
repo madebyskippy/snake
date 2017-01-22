@@ -27,6 +27,9 @@ public class Manager : MonoBehaviour {
 	public Text end;
 	public Text time;
 
+	[SerializeField] AudioClip marimba;
+	[SerializeField] AudioClip bass;
+
 	//time stuff
 	int timeMax = 60; //in seconds
 	float timeLeft;
@@ -42,6 +45,9 @@ public class Manager : MonoBehaviour {
 	int[] keyNum;// = new int[5]; //keeps track of the letters (since it doesn't go in order)
 	bool onePlayerPressed;
 	private string myControllerSuffix = "";
+
+	private bool aPressed;
+	private bool bPressed;
 
 	AudioSource audioSource;
 
@@ -63,6 +69,9 @@ public class Manager : MonoBehaviour {
 		if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer) {
 			myControllerSuffix += "Mac";
 		}
+
+		aPressed = false;
+		bPressed = false;
 	}
 	
 	// Update is called once per frame
@@ -71,6 +80,10 @@ public class Manager : MonoBehaviour {
 			if (Input.GetButtonDown("SubmitA"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.Q)) { //temp for right trigger
 				Debug.Log ("player 1 pressed");
 				playerInstruc [0].text = "ready!!";
+				if (aPressed == false) {
+					aPressed = true;
+					CS_AudioManager.Instance.PlaySFX (marimba, Random.Range (0.8f, 1.2f), Random.Range (0.8f, 1.2f));
+				}
 				playerInstrucArrows[0].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
 				if (onePlayerPressed) {
 					Invoke ("startGame", 1.0f);
@@ -81,6 +94,10 @@ public class Manager : MonoBehaviour {
 			if (Input.GetButtonDown("SubmitB"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.P)) { //temp for left trigger
 				Debug.Log ("player 2 pressed");
 				playerInstruc [1].text = "ready!!";
+				if (bPressed == false) {
+					bPressed = true;
+					CS_AudioManager.Instance.PlaySFX (marimba, Random.Range (0.8f, 1.2f), Random.Range (0.8f, 1.2f));
+				}
 				playerInstrucArrows[1].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
 				if (onePlayerPressed) {
 					Invoke ("startGame", 1.0f);
@@ -168,6 +185,7 @@ public class Manager : MonoBehaviour {
 
 	//ball fell out of bounds
 	public void BallFell(int team){
+		CS_AudioManager.Instance.PlaySFX (bass, Random.Range (0.8f, 1.2f), Random.Range (0.8f, 1.2f));
 		Instantiate (particles [team], currentBalls [team].transform.position, Quaternion.identity);
 		Destroy (currentBalls [team]);
 		makeBall (team);

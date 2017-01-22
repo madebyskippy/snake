@@ -52,7 +52,7 @@ public class CS_Controller : MonoBehaviour {
 				if (justPlayedSideSound == false) {
 					justPlayedSideSound = true;
 					CS_AudioManager.Instance.PlaySFX (sideSound,0.1f,1 + (float)myStep*0.05f);
-					Invoke ("ResetJustPlayed", 0.15f);
+					Invoke ("ResetJustPlayed", 0.1f);
 				}
 			} else if (myAccumulation < mySpeed * -1) {
 				myAccumulation += mySpeed;
@@ -60,7 +60,7 @@ public class CS_Controller : MonoBehaviour {
 				if (justPlayedSideSound == false) {
 					justPlayedSideSound = true;
 					CS_AudioManager.Instance.PlaySFX (sideSound,0.1f,1 + (float)myStep*0.05f);
-					Invoke ("ResetJustPlayed", 0.15f);
+					Invoke ("ResetJustPlayed", 0.1f);
 				}
 			}
 		}
