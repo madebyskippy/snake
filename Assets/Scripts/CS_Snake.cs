@@ -18,7 +18,8 @@ public class CS_Snake : MonoBehaviour {
 	[SerializeField] float myAnchorMovement_Ratio = 2;
 
 	private List<GameObject> myAnchors = new List<GameObject> ();
-	private List<bool> myAnchorsIsPulling = new List<bool> ();
+	private List<float> myAnchorsPullA = new List<float> ();
+	private List<float> myAnchorsPullB = new List<float> ();
 
 	private GameObject[] keyAnchors = new GameObject[10];
 	private bool[] keyAnchorsIsPulling = new bool[10];
@@ -76,8 +77,9 @@ public class CS_Snake : MonoBehaviour {
 //			t_Anchor.GetComponent<SpringJoint2D> ().connectedAnchor = Vector3.zero;
 
 			myAnchors.Add (t_Anchor);
-			bool t_isPulling = false;
-			myAnchorsIsPulling.Add (t_isPulling);
+			int t_PullNumber = 0;
+			myAnchorsPullA.Add (t_PullNumber);
+			myAnchorsPullB.Add (t_PullNumber);
 		}
 
 		for (int i = 0; i < keyAnchors.Length; i++) {
@@ -128,12 +130,11 @@ public class CS_Snake : MonoBehaviour {
 		for (int i = 0; i < myAnchors.Count; i++) {
 //			myAnchors [i].GetComponent<SpringJoint2D> ().distance = 10f;
 			//myAnchors [i].GetComponent<SpriteRenderer> ().color = Color.black;
-			myAnchors [i].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
-				myAnchorMovement_Amplitude * Mathf.Sin (myAnchorMovement_Ratio * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
-			if (myAnchorsIsPulling [i] == true) {
-				myAnchors [i].GetComponent<SpringJoint2D> ().distance = 
-					myAnchors [i].GetComponent<SpringJoint2D> ().distance - keyPullLength;
-			}
+			myAnchors [i].GetComponent<SpringJoint2D> ().distance = (
+			    myAnchorDeltaPositionY +
+			    myAnchorMovement_Amplitude * Mathf.Sin (myAnchorMovement_Ratio * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal)) +
+			    (myAnchorsPullA [i] + myAnchorsPullB [i]) * keyPullLength
+			);
 //			Debug.Log (myAnchors [i].GetComponent<SpringJoint2D> ().distance);
 		}
 
@@ -152,13 +153,19 @@ public class CS_Snake : MonoBehaviour {
 	public List<GameObject> GetAnchors () {
 		return myAnchors;
 	}
-
-	public void PullAnchor (int g_number) {
-		myAnchorsIsPulling [g_number] = true;
+		
+	//Player: 1=A, 2=B
+	public void PullAnchor (int g_step, int g_player, float g_amount) {
+		if (g_player == 1)
+			myAnchorsPullA [g_step] = g_amount * -1;
+		else if (g_player == 2)
+			myAnchorsPullB [g_step] = g_amount * -1;
+		else
+			Debug.Log ("WHAT PLAYER ARE YOU CALLING? " + g_player);
 	}
 
-	public void ReleaseAnchor (int g_number) {
-		myAnchorsIsPulling [g_number] = false;
+	public void ReleaseAnchor (int g_step, int g_player) {
+		PullAnchor (g_step, g_player, 0);
 	}
 
 	public void PullSpring (int g_key) {
