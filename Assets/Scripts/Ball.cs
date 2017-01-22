@@ -58,28 +58,28 @@ public class Ball : MonoBehaviour {
 //				Camera.main.WorldToViewportPoint (transform.position);
 
 				if (transform.position.x <= -9f) {
-					CS_AudioManager.Instance.PlaySFX (hit1);
+					CS_AudioManager.Instance.PlaySFX (hit1, Random.Range (0.5f, 1.2f), 1);
 				}
 				else if (transform.position.x <= -6f) {
-					CS_AudioManager.Instance.PlaySFX (hit2);
+					CS_AudioManager.Instance.PlaySFX (hit2, Random.Range (0.5f, 1.2f), 1);
 				}
 				else if (transform.position.x <= -3f) {
-					CS_AudioManager.Instance.PlaySFX (hit3);
+					CS_AudioManager.Instance.PlaySFX (hit3, Random.Range (0.5f, 1.2f), 1);
 				}
 				else if (transform.position.x <= 0f) {
-					CS_AudioManager.Instance.PlaySFX (hit4);
+					CS_AudioManager.Instance.PlaySFX (hit4, Random.Range (0.5f, 1.2f), 1);
 				}
 				else if (transform.position.x <= 3f) {
-					CS_AudioManager.Instance.PlaySFX (hit5);
+					CS_AudioManager.Instance.PlaySFX (hit5, Random.Range (0.5f, 1.2f), 1);
 				}
 				else if (transform.position.x <= 6f) {
-					CS_AudioManager.Instance.PlaySFX (hit6);
+					CS_AudioManager.Instance.PlaySFX (hit6, Random.Range (0.5f, 1.2f), 1);
 				}
 				else if (transform.position.x <= 9f) {
-					CS_AudioManager.Instance.PlaySFX (hit7);
+					CS_AudioManager.Instance.PlaySFX (hit7, Random.Range (0.5f, 1.2f), 1);
 				}
 				else {
-					CS_AudioManager.Instance.PlaySFX (hit8);
+					CS_AudioManager.Instance.PlaySFX (hit8, Random.Range (0.5f, 1.2f), 1);
 				}
 
 					justPlayedHit = true;

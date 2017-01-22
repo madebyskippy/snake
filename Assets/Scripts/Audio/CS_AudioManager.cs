@@ -58,6 +58,20 @@ public class CS_AudioManager : MonoBehaviour {
 		DestroyObject(t_SFX, g_SFX.length);
 	}
 
+	public void PlaySFX (AudioClip g_SFX, float g_vol, float g_pit) {
+		if (g_SFX == null) {
+			Debug.LogWarning ("Can not find the sound effect!");
+			return;
+		}
+		GameObject t_SFX = Instantiate (myPrefabSFX) as GameObject;
+		t_SFX.name = "SFX_" + g_SFX.name;
+		t_SFX.GetComponent<AudioSource> ().clip = g_SFX;
+		t_SFX.GetComponent<AudioSource> ().volume = g_vol;
+		t_SFX.GetComponent<AudioSource> ().pitch = g_pit;
+		t_SFX.GetComponent<AudioSource> ().Play ();
+		DestroyObject(t_SFX, g_SFX.length);
+	}
+
 	public void PlayBGM (AudioClip g_BGM) {
 		if (myAudioSource.isPlaying == false) {
 			myAudioSource.clip = g_BGM;
