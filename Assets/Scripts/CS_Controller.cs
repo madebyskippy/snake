@@ -5,6 +5,8 @@ using UnityEngine;
 public class CS_Controller : MonoBehaviour {
 	[SerializeField] CS_Snake mySnake;
 	[SerializeField] int myPlayerNumber;
+	[SerializeField] GameObject mySelection;
+	private string myControllerSuffix = "";
 	private int myStep;
 
 	[SerializeField] float mySpeed = 0.02f; //How many time does it take to move to the next point
@@ -13,11 +15,23 @@ public class CS_Controller : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		myStep = 0;
+		mySelection = Instantiate (mySelection, this.transform);
+
+		if(myPlayerNumber == 1){
+			myControllerSuffix = "A";
+		} else if (myPlayerNumber == 2) {
+			myControllerSuffix = "B";
+			if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer) {
+				myControllerSuffix += "Mac";
+			}
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		myAccumulation += Input.GetAxis ("Horizontal") * Time.deltaTime;
+		Debug.Log ("Horizontal" + myControllerSuffix);
+
+		myAccumulation += Input.GetAxis ("Horizontal" + myControllerSuffix) * Time.deltaTime;
 		Debug.Log (myAccumulation);
 
 		for (int i = 0; i < 100; i++) {
@@ -30,11 +44,14 @@ public class CS_Controller : MonoBehaviour {
 			}
 		}
 
-		mySnake.PullAnchor (myStep, myPlayerNumber, Input.GetAxis ("Vertical"));
+		mySelection.transform.position = mySnake.GetBodyParts () [myStep].transform.position;
+
+		mySnake.PullAnchor (myStep, myPlayerNumber, Input.GetAxis ("Vertical" + myControllerSuffix));
 
 		mySnake.highlightSnakePart (myStep);
 
-		Debug.Log (myStep);
+
+//		Debug.Log (myStep);
 
 	}
 
