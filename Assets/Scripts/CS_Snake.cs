@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class CS_Snake : MonoBehaviour {
 	[SerializeField] GameObject myBodySample;
@@ -18,7 +19,8 @@ public class CS_Snake : MonoBehaviour {
 	[SerializeField] float myAnchorMovement_Ratio = 2;
 
 	private List<GameObject> myAnchors = new List<GameObject> ();
-	private List<bool> myAnchorsIsPulling = new List<bool> ();
+	private List<float> myAnchorsPullA = new List<float> ();
+	private List<float> myAnchorsPullB = new List<float> ();
 
 	private GameObject[] keyAnchors = new GameObject[10];
 	private bool[] keyAnchorsIsPulling = new bool[10];
@@ -26,6 +28,8 @@ public class CS_Snake : MonoBehaviour {
 
 	[SerializeField] GameObject head;
 	[SerializeField] GameObject tongue;
+	[SerializeField] GameObject eyeSample;
+	private GameObject[] eyes;
 
 	private Rigidbody2D[] tongueBones;
 	private HingeJoint2D hingeTongue0;
@@ -76,8 +80,9 @@ public class CS_Snake : MonoBehaviour {
 //			t_Anchor.GetComponent<SpringJoint2D> ().connectedAnchor = Vector3.zero;
 
 			myAnchors.Add (t_Anchor);
-			bool t_isPulling = false;
-			myAnchorsIsPulling.Add (t_isPulling);
+			int t_PullNumber = 0;
+			myAnchorsPullA.Add (t_PullNumber);
+			myAnchorsPullB.Add (t_PullNumber);
 		}
 
 		for (int i = 0; i < keyAnchors.Length; i++) {
@@ -91,7 +96,8 @@ public class CS_Snake : MonoBehaviour {
 		head.transform.localPosition = Vector3.zero;
 
 		tongue = Instantiate(tongue, myBodyParts[0].transform);
-		tongue.transform.localPosition = Vector3.zero;
+		tongue.transform.localScale=new Vector3 (0.6f,0.6f,1f);
+		tongue.transform.localPosition = new Vector3 (-3.2f, -0.22f, 0f);//Vector3.zero;
 		tongueBones = tongue.GetComponentsInChildren<Rigidbody2D>();
 		headBone = myBodyParts [0].GetComponent<Rigidbody2D> ();
 //		Debug.Log (tongueBones[0]);
@@ -103,6 +109,18 @@ public class CS_Snake : MonoBehaviour {
 //		hingeTongue0.connectedBody = headBone;
 //		springTongue0.connectedBody = headBone;
 		fixedTongue0.connectedBody = headBone;
+
+		eyes = new GameObject[2];
+		for (int i = 0; i < eyes.Length; i++) {
+			eyes [i] = Instantiate (eyeSample, head.transform) as GameObject;
+			eyes [i].GetComponent<SpriteRenderer> ().color = new Color (0f, 0f, 0f, 1f);
+			eyes [i].transform.localScale = new Vector3 (0.125f, 0.125f, 1f);
+			eyes [i].transform.SetParent(head.transform);
+		}
+
+		eyes [0].transform.localPosition = new Vector3 (-0.4f, 0.3f, -1f);
+		eyes [1].transform.localPosition = new Vector3 (-0.4f, -0.3f, -1f);
+		Blinking ();
 	}
 	
 	// Update is called once per frame
@@ -128,12 +146,11 @@ public class CS_Snake : MonoBehaviour {
 		for (int i = 0; i < myAnchors.Count; i++) {
 //			myAnchors [i].GetComponent<SpringJoint2D> ().distance = 10f;
 			//myAnchors [i].GetComponent<SpriteRenderer> ().color = Color.black;
-			myAnchors [i].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
-				myAnchorMovement_Amplitude * Mathf.Sin (myAnchorMovement_Ratio * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
-			if (myAnchorsIsPulling [i] == true) {
-				myAnchors [i].GetComponent<SpringJoint2D> ().distance = 
-					myAnchors [i].GetComponent<SpringJoint2D> ().distance - keyPullLength;
-			}
+			myAnchors [i].GetComponent<SpringJoint2D> ().distance = (
+			    myAnchorDeltaPositionY +
+			    myAnchorMovement_Amplitude * Mathf.Sin (myAnchorMovement_Ratio * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal)) +
+			    (myAnchorsPullA [i] + myAnchorsPullB [i]) * keyPullLength
+			);
 //			Debug.Log (myAnchors [i].GetComponent<SpringJoint2D> ().distance);
 		}
 
@@ -152,13 +169,19 @@ public class CS_Snake : MonoBehaviour {
 	public List<GameObject> GetAnchors () {
 		return myAnchors;
 	}
-
-	public void PullAnchor (int g_number) {
-		myAnchorsIsPulling [g_number] = true;
+		
+	//Player: 1=A, 2=B
+	public void PullAnchor (int g_step, int g_player, float g_amount) {
+		if (g_player == 1)
+			myAnchorsPullA [g_step] = g_amount * -1;
+		else if (g_player == 2)
+			myAnchorsPullB [g_step] = g_amount * -1;
+		else
+			Debug.Log ("WHAT PLAYER ARE YOU CALLING? " + g_player);
 	}
 
-	public void ReleaseAnchor (int g_number) {
-		myAnchorsIsPulling [g_number] = false;
+	public void ReleaseAnchor (int g_step, int g_player) {
+		PullAnchor (g_step, g_player, 0);
 	}
 
 	public void PullSpring (int g_key) {
@@ -176,13 +199,21 @@ public class CS_Snake : MonoBehaviour {
 	public void highlightSnakePart(int g){
 //		myBodyParts[g].GetComponent<SpriteRenderer>().color = new Color(149f/255f,255f/255f,182f/255f,1f);
 		myBodyParts[g].transform.localScale = new Vector3(1.5f,1.5f,1f);
-		StartCoroutine(normalColorSnakePart(g, 0.25f));
+		myBodyParts[g].transform.DOScale (new Vector3(1f,1f,1f),0.25f);
+//		StartCoroutine(normalColorSnakePart(g, 0.25f));
 	}
 
 	IEnumerator normalColorSnakePart(int g, float delayTime){
 		yield return new WaitForSeconds(delayTime);
 //		myBodyParts[g].GetComponent<SpriteRenderer>().color = new Color(109f/255f,215f/255f,142f/255f,1f);
 		myBodyParts[g].transform.localScale = new Vector3(1f,1f,1f);
+	}
+
+	public void Blinking(){
+		float rate = UnityEngine.Random.Range (1, 4);
+		eyes [0].transform.DOScaleX (0, 0.1f).SetLoops (2, LoopType.Yoyo).SetDelay (rate);
+		eyes[1].transform.DOScaleX(0, 0.1f).SetLoops(2, LoopType.Yoyo).SetDelay(rate)
+			.OnComplete(()=>Blinking());
 	}
 
 
