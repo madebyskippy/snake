@@ -71,7 +71,7 @@ public class Manager : MonoBehaviour {
 			if (Input.GetButtonDown("SubmitA"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.Q)) { //temp for right trigger
 				Debug.Log ("player 1 pressed");
 				playerInstruc [0].text = "ready!!";
-				playerInstrucArrows[0].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
+//				playerInstrucArrows[0].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
 				if (onePlayerPressed) {
 					Invoke ("startGame", 1.0f);
 				} else {
@@ -81,7 +81,7 @@ public class Manager : MonoBehaviour {
 			if (Input.GetButtonDown("SubmitB"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.P)) { //temp for left trigger
 				Debug.Log ("player 2 pressed");
 				playerInstruc [1].text = "ready!!";
-				playerInstrucArrows[1].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
+//				playerInstrucArrows[1].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
 				if (onePlayerPressed) {
 					Invoke ("startGame", 1.0f);
 				} else {
@@ -118,8 +118,8 @@ public class Manager : MonoBehaviour {
 		//		end.text = "";
 		playerInstruc [0].text = "ready?";
 		playerInstruc [1].text = "ready?";
-		playerInstrucArrows[0].transform.localScale = new Vector3(1f,1f,1f);
-		playerInstrucArrows[1].transform.localScale = new Vector3(1f,1f,1f);
+//		playerInstrucArrows[0].transform.localScale = new Vector3(1f,1f,1f);
+//		playerInstrucArrows[1].transform.localScale = new Vector3(1f,1f,1f);
 		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90f);
 		timeLeft = (float)timeMax;
 		totalScore = 0;
