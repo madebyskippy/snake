@@ -26,7 +26,7 @@ public class Manager : MonoBehaviour {
 	public Text time;
 
 	//time stuff
-	int timeMax = 5; //in seconds
+	int timeMax = 60; //in seconds
 	float timeLeft;
 
 	//ball stuff
@@ -72,16 +72,16 @@ public class Manager : MonoBehaviour {
 			}
 		} else if (mode == 1) { //gameplay
 			for (int i = 0; i < keys.Length; i++) {
-				if (Input.GetKeyDown (KeyCode.A + keyNum[i]-1)) {
-					//				keys [i].transform.localScale = new Vector3 (1.2f, 1.2f, 1f);
-//					keys [i].GetComponent<Rigidbody2D> ().AddForce (new Vector2(0f,20000f));
-					snake.GetComponent<CS_Snake>().PullSpring(i);
-				}
-				if (Input.GetKeyUp (KeyCode.A + keyNum[i]-1)) {
-//					keys [i].transform.localScale = new Vector3 (1f, 1f, 1f);
-
-					snake.GetComponent<CS_Snake>().ReleaseSpring(i);
-				}
+//				if (Input.GetKeyDown (KeyCode.A + keyNum[i]-1)) {
+//					//				keys [i].transform.localScale = new Vector3 (1.2f, 1.2f, 1f);
+////					keys [i].GetComponent<Rigidbody2D> ().AddForce (new Vector2(0f,20000f));
+//					snake.GetComponent<CS_Snake>().PullSpring(i);
+//				}
+//				if (Input.GetKeyUp (KeyCode.A + keyNum[i]-1)) {
+////					keys [i].transform.localScale = new Vector3 (1f, 1f, 1f);
+//
+//					snake.GetComponent<CS_Snake>().ReleaseSpring(i);
+//				}
 			}
 			timeLeft -= Time.deltaTime;
 			if (timeLeft < 10) {
