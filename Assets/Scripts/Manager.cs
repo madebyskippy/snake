@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class Manager : MonoBehaviour {
 
@@ -20,6 +21,7 @@ public class Manager : MonoBehaviour {
 	public GameObject title;
 	public GameObject instructions;
 	public Text[] playerInstruc = new Text[2]; //the "ready?" text
+	public GameObject[] playerInstrucArrows = new GameObject[2];
 	public GameObject scorePie;
 	public GameObject scorePiece;
 	public Text end;
@@ -62,6 +64,7 @@ public class Manager : MonoBehaviour {
 		if (mode == 0) { //menu state
 			if (Input.GetKeyDown (KeyCode.Q)) { //temp for right trigger
 				playerInstruc [0].text = "ready!!";
+				playerInstrucArrows[0].transform.DOScale(new Vector3(0f,0f,0f),0.25f);
 				if (onePlayerPressed) {
 					Invoke ("startGame", 1.0f);
 				} else {
@@ -70,6 +73,7 @@ public class Manager : MonoBehaviour {
 			}
 			if (Input.GetKeyDown (KeyCode.P)) { //temp for left trigger
 				playerInstruc [1].text = "ready!!";
+				playerInstrucArrows[1].transform.DOScale(new Vector3(0f,0f,0f),0.25f);
 				if (onePlayerPressed) {
 					Invoke ("startGame", 1.0f);
 				} else {
@@ -136,7 +140,8 @@ public class Manager : MonoBehaviour {
 		basket.SetActive (false);
 		instructions.SetActive (true);
 		title.SetActive(true);
-		scorePie.transform.localScale = new Vector3 (2.5f, 2.5f, 2.5f);
+//		scorePie.transform.localScale = new Vector3 (2.5f, 2.5f, 2.5f);
+		scorePie.transform.DOScale (new Vector3 (2.5f, 2.5f, 2.5f),0.5f);
 //		end.text = "game over \n \n S P A C E  to play again";
 		for (int i = 0; i < currentBalls.Length; i++) {
 			Destroy (currentBalls [i]);
@@ -144,7 +149,7 @@ public class Manager : MonoBehaviour {
 	}
 
 	void makeBall(int team){
-		currentBalls [team] = Instantiate (ballSample, ballStartPosition + new Vector3(0f,2f*team,0f), Quaternion.identity) as GameObject;
+		currentBalls [team] = Instantiate (ballSample, ballStartPosition + new Vector3(12f*team,0f,0f), Quaternion.identity) as GameObject;
 		currentBalls [team].GetComponent<Ball> ().setTeam (team,playerColors[team]);
 	}
 
@@ -165,5 +170,10 @@ public class Manager : MonoBehaviour {
 		Debug.Log(scorePiece.transform.eulerAngles.z);
 		float targetAngle =  180f * score [0] / totalScore;
 		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, targetAngle);
+		Sequence sq = DOTween.Sequence();
+		sq.Append(scorePie.transform.DOScale(new Vector2(1.4f, 1.4f), 0.15f));
+		sq.Append(scorePie.transform.DOScale(new Vector2(0.8f, 0.8f), 0.1f));
+		sq.Append(scorePie.transform.DOScale(new Vector2(1.4f, 1.4f), 0.1f));
+		sq.Append(scorePie.transform.DOScale(new Vector2(1.1f, 1.1f), 0.1f));
 	}
 }
