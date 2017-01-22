@@ -16,15 +16,17 @@ public class Manager : MonoBehaviour {
 
 	//ui stuff
 	int mode; //0=start screen; 1=game; 2=end screen
-	public GameObject backgroundKeyboard;
+//	public GameObject backgroundKeyboard;
 	public GameObject title;
 	public GameObject instructions;
+	public Text[] playerInstruc = new Text[2]; //the "ready?" text
+	public GameObject scorePie;
 	public GameObject scorePiece;
 	public Text end;
 	public Text time;
 
 	//time stuff
-	int timeMax = 60; //in seconds
+	int timeMax = 5; //in seconds
 	float timeLeft;
 
 	//ball stuff
@@ -35,29 +37,37 @@ public class Manager : MonoBehaviour {
 	//input stuff
 	public GameObject[] keys = new GameObject[10]; //for now
 	int[] keyNum;// = new int[5]; //keeps track of the letters (since it doesn't go in order)
+	bool onePlayerPressed;
 
 	// Use this for initialization
 	void Start () {
-		backgroundKeyboard.SetActive(false);
+//		backgroundKeyboard.SetActive(false);
 		snake = GameObject.Find ("Snake");
 		keyNum = new int[10]{1, 19, 4, 6, 7,8,10,11,12,-37};
 		currentBalls = new GameObject[numPlayers];
 		score = new int[numPlayers];
 		reset ();
 		timeLeft = 5f;//(float)timeMax;
+		onePlayerPressed = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (mode == 0) { //start
-			if (Input.GetKeyDown (KeyCode.Space)) {
-				mode = 1; //start game
-				backgroundKeyboard.SetActive(false);
-				title.SetActive(false);
-				instructions.SetActive(false);
-				basket.SetActive (true);
-				for (int i = 0; i < numPlayers; i++) {
-					makeBall (i);
+		if (mode == 0) { //menu state
+			if (Input.GetKeyDown (KeyCode.Q)) { //temp for right trigger
+				playerInstruc [0].text = "ready!!";
+				if (onePlayerPressed) {
+					Invoke ("startGame", 1.0f);
+				} else {
+					onePlayerPressed = true;
+				}
+			}
+			if (Input.GetKeyDown (KeyCode.P)) { //temp for left trigger
+				playerInstruc [1].text = "ready!!";
+				if (onePlayerPressed) {
+					Invoke ("startGame", 1.0f);
+				} else {
+					onePlayerPressed = true;
 				}
 			}
 		} else if (mode == 1) { //gameplay
@@ -80,34 +90,48 @@ public class Manager : MonoBehaviour {
 				time.text = "0:"+(int)timeLeft;
 			}
 			if (timeLeft < 0) {
-				mode = 2;
+				mode = 0;
 				endGame ();
-			}
-		} else if (mode == 2) { //end
-//			Debug.Log("game end");
-			if (Input.GetKeyDown (KeyCode.Space)) {
-				reset ();
-				end.text = "";
-				mode = 1; //start game
-				basket.SetActive (true);
-				for (int i = 0; i < numPlayers; i++) {
-					makeBall (i);
-				}
 			}
 		}
 	}
 
 	void reset(){
+		//		end.text = "";
+		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90f);
 		timeLeft = (float)timeMax;
 		totalScore = 0;
 		for (int i=0; i<numPlayers; i++){
 			score[i]=0;
 		}
+		scorePie.transform.localScale = new Vector3 (1.1f, 1.1f, 1.1f);
+	}
+
+	void startGame(){
+		if (mode != 1) {
+			reset ();
+			mode = 1; //start game
+			//				backgroundKeyboard.SetActive(false);
+			title.SetActive(false);
+			instructions.SetActive(false);
+			basket.SetActive (true);
+			for (int i = 0; i < numPlayers; i++) {
+				//					for (int j = 0; j < 10; j++) {
+				makeBall (i);
+				//					}
+			}
+		}
 	}
 
 	void endGame(){
+		playerInstruc [0].text = "ready?";
+		playerInstruc [1].text = "ready?";
+		onePlayerPressed = false;
 		basket.SetActive (false);
-		end.text = "game over \n \n S P A C E  to play again";
+		instructions.SetActive (true);
+		title.SetActive(true);
+		scorePie.transform.localScale = new Vector3 (2.5f, 2.5f, 2.5f);
+//		end.text = "game over \n \n S P A C E  to play again";
 		for (int i = 0; i < currentBalls.Length; i++) {
 			Destroy (currentBalls [i]);
 		}
