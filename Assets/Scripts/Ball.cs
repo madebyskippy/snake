@@ -9,7 +9,7 @@ public class Ball : MonoBehaviour {
 	AudioSource audioSource;
 	private bool justPlayedHit;
 	[SerializeField] AudioClip hit;
-	[SerializeField] AudioClip score;
+
 
 	// Use this for initialization
 	void Start () {
@@ -39,8 +39,6 @@ public class Ball : MonoBehaviour {
 		if (collider.gameObject.tag == "Basket") {
 			if (transform.position.y > collider.gameObject.transform.position.y) {
 				Debug.Log("hit basket");
-				audioSource.clip = score;
-				audioSource.Play ();
 				manager.SendMessage ("scored", team);
 
 			}

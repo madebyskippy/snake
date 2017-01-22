@@ -25,7 +25,9 @@ public class CS_Snake : MonoBehaviour {
 	[SerializeField] float keyPullLength = 3;
 
 	[SerializeField] GameObject head;
+	[SerializeField] GameObject tongue;
 
+	private Rigidbody2D tongueBone;
 
 	// Use this for initialization
 	void Start () {
@@ -83,6 +85,10 @@ public class CS_Snake : MonoBehaviour {
 		// Head
 		head = Instantiate(head, myBodyParts[0].transform);
 		head.transform.localPosition = Vector3.zero;
+
+		tongue = Instantiate(tongue, myBodyParts[0].transform);
+		tongue.transform.localPosition = Vector3.zero;
+
 	}
 	
 	// Update is called once per frame
