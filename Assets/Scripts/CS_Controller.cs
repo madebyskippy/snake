@@ -21,9 +21,11 @@ public class CS_Controller : MonoBehaviour {
 			myControllerSuffix = "A";
 		} else if (myPlayerNumber == 2) {
 			myControllerSuffix = "B";
-			if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer) {
-				myControllerSuffix += "Mac";
-			}
+		}
+
+
+		if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer) {
+			myControllerSuffix += "Mac";
 		}
 	}
 	
