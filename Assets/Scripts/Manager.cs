@@ -21,7 +21,6 @@ public class Manager : MonoBehaviour {
 	public GameObject title;
 	public GameObject instructions;
 	public Text[] playerInstruc = new Text[2]; //the "ready?" text
-	public GameObject[] playerInstrucArrows = new GameObject[2];
 	public GameObject scorePie;
 	public GameObject scorePiece;
 	public Text end;
@@ -126,12 +125,12 @@ public class Manager : MonoBehaviour {
 		//		end.text = "";
 		playerInstruc [0].text = "ready?";
 		playerInstruc [1].text = "ready?";
-//		playerInstrucArrows[0].transform.localScale = new Vector3(1f,1f,1f);
-//		playerInstrucArrows[1].transform.localScale = new Vector3(1f,1f,1f);
 		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90f);
 		timeLeft = (float)timeMax;
 		totalScore = 0;
 		onePlayerPressed = false;
+		aPressed = false;
+		bPressed = false;
 		for (int i=0; i<numPlayers; i++){
 			score[i]=0;
 		}
@@ -146,6 +145,8 @@ public class Manager : MonoBehaviour {
 			title.SetActive(false);
 			instructions.SetActive(false);
 			basket.SetActive (true);
+			playerInstruc [0].text = "0";
+			playerInstruc [1].text = "0";
 			for (int i = 0; i < numPlayers; i++) {
 				//					for (int j = 0; j < 10; j++) {
 				makeBall (i);
@@ -157,13 +158,18 @@ public class Manager : MonoBehaviour {
 	void endGame(){
 		playerInstruc [0].text = "ready?";
 		playerInstruc [1].text = "ready?";
+		if (score [0] > score [1]) {
+			time.text = "blue wins";
+		} else if (score [0] < score [1]) {
+			time.text = "red wins";
+		} else {
+			time.text = "tie";
+		}
 		onePlayerPressed = false;
 		basket.SetActive (false);
 		instructions.SetActive (true);
 		title.SetActive(true);
-//		scorePie.transform.localScale = new Vector3 (2.5f, 2.5f, 2.5f);
 		scorePie.transform.DOScale (new Vector3 (1.75f, 1.75f, 1.75f),0.5f);
-//		end.text = "game over \n \n S P A C E  to play again";
 		for (int i = 0; i < currentBalls.Length; i++) {
 			Destroy (currentBalls [i]);
 		}
@@ -189,9 +195,7 @@ public class Manager : MonoBehaviour {
 		makeBall (team);
 		score [team] += 1;
 		totalScore += 1;
-		Debug.Log(scorePiece.transform.eulerAngles.x);
-		Debug.Log(scorePiece.transform.eulerAngles.y);
-		Debug.Log(scorePiece.transform.eulerAngles.z);
+		playerInstruc [1-team].text = ""+score [team];
 		float targetAngle =  180f * score [0] / totalScore;
 		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, targetAngle);
 		Sequence sq = DOTween.Sequence();
