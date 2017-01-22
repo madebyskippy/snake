@@ -27,7 +27,11 @@ public class CS_Snake : MonoBehaviour {
 	[SerializeField] GameObject head;
 	[SerializeField] GameObject tongue;
 
-	private Rigidbody2D tongueBone;
+	private Rigidbody2D[] tongueBones;
+	private HingeJoint2D hingeTongue0;
+	private SpringJoint2D springTongue0;
+	private FixedJoint2D fixedTongue0;
+	private Rigidbody2D headBone;
 
 	// Use this for initialization
 	void Start () {
@@ -88,7 +92,17 @@ public class CS_Snake : MonoBehaviour {
 
 		tongue = Instantiate(tongue, myBodyParts[0].transform);
 		tongue.transform.localPosition = Vector3.zero;
+		tongueBones = tongue.GetComponentsInChildren<Rigidbody2D>();
+		headBone = myBodyParts [0].GetComponent<Rigidbody2D> ();
+//		Debug.Log (tongueBones[0]);
 
+		hingeTongue0 = tongueBones[0].GetComponent<HingeJoint2D>();
+		springTongue0 = tongueBones [0].GetComponent<SpringJoint2D> ();
+		fixedTongue0 = tongueBones [0].GetComponent<FixedJoint2D> ();
+
+//		hingeTongue0.connectedBody = headBone;
+//		springTongue0.connectedBody = headBone;
+		fixedTongue0.connectedBody = headBone;
 	}
 	
 	// Update is called once per frame
@@ -170,4 +184,6 @@ public class CS_Snake : MonoBehaviour {
 //		myBodyParts[g].GetComponent<SpriteRenderer>().color = new Color(109f/255f,215f/255f,142f/255f,1f);
 		myBodyParts[g].transform.localScale = new Vector3(1f,1f,1f);
 	}
+
+
 }
