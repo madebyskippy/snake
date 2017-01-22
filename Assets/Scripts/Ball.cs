@@ -7,13 +7,15 @@ public class Ball : MonoBehaviour {
 	GameObject manager;
 	public int team; //which player the ball is for
 	AudioSource audioSource;
-	private bool justPlayed;
+	private bool justPlayedHit;
+	[SerializeField] AudioClip hit;
+	[SerializeField] AudioClip score;
 
 	// Use this for initialization
 	void Start () {
 		manager = GameObject.Find ("Manager");
 		audioSource = GetComponent<AudioSource>();
-		justPlayed = false;
+		justPlayedHit = false;
 	}
 	
 	// Update is called once per frame
@@ -37,20 +39,24 @@ public class Ball : MonoBehaviour {
 		if (collider.gameObject.tag == "Basket") {
 			if (transform.position.y > collider.gameObject.transform.position.y) {
 				Debug.Log("hit basket");
+				audioSource.clip = score;
+				audioSource.Play ();
 				manager.SendMessage ("scored", team);
+
 			}
 		}
 		if (collider.gameObject.tag == "Snake" || collider.gameObject.tag == "Ball") {
-			if (justPlayed == false) {
-				justPlayed = true;
-				audioSource.pitch = Random.Range (1f, 2f);
+			if (justPlayedHit == false) {
+				audioSource.clip = hit;
+				justPlayedHit = true;
+				audioSource.pitch = Random.Range (1f, 1.3f);
 				audioSource.Play (); 
-				Invoke("ResetJustPlayed", 1);
+				Invoke("ResetJustPlayed", 0.5f);
 			}
 		}
 	}
 
 	void ResetJustPlayed () {
-		justPlayed = false;
+		justPlayedHit = false;
 	}
 }

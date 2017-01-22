@@ -39,6 +39,10 @@ public class Manager : MonoBehaviour {
 	int[] keyNum;// = new int[5]; //keeps track of the letters (since it doesn't go in order)
 	bool onePlayerPressed;
 
+	AudioSource audioSource;
+
+
+
 	// Use this for initialization
 	void Start () {
 //		backgroundKeyboard.SetActive(false);
@@ -49,6 +53,8 @@ public class Manager : MonoBehaviour {
 		reset ();
 		timeLeft = 5f;//(float)timeMax;
 		onePlayerPressed = false;
+
+		audioSource = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -149,6 +155,7 @@ public class Manager : MonoBehaviour {
 	}
 
 	public void scored(int team){
+		audioSource.Play ();
 		Destroy (currentBalls [team]);
 		makeBall (team);
 		score [team] += 1;
