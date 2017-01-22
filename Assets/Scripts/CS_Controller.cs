@@ -13,6 +13,7 @@ public class CS_Controller : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		if (Input.GetAxis ("Horizontal") > 0) {
 			mySnake.ReleaseAnchor (myStep);
 			myStep++;
@@ -32,6 +33,8 @@ public class CS_Controller : MonoBehaviour {
 		} else {
 			mySnake.PullAnchor (myStep);
 		}
+
+		mySnake.highlightSnakePart (myStep);
 
 	}
 }
