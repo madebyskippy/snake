@@ -31,7 +31,7 @@ public class CS_Controller : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log ("Horizontal" + myControllerSuffix);
+//		Debug.Log ("Horizontal" + myControllerSuffix);
 
 		myAccumulation += Input.GetAxis ("Horizontal" + myControllerSuffix) * Time.deltaTime;
 //		Debug.Log (myAccumulation);

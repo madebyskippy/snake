@@ -68,7 +68,8 @@ public class Manager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (mode == 0) { //menu state
-			if (Input.GetButton("SubmitA"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.Q)) { //temp for right trigger
+			if (Input.GetButtonDown("SubmitA"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.Q)) { //temp for right trigger
+				Debug.Log ("player 1 pressed");
 				playerInstruc [0].text = "ready!!";
 				playerInstrucArrows[0].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
 				if (onePlayerPressed) {
@@ -77,7 +78,8 @@ public class Manager : MonoBehaviour {
 					onePlayerPressed = true;
 				}
 			}
-			if (Input.GetButton("SubmitB"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.P)) { //temp for left trigger
+			if (Input.GetButtonDown("SubmitB"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.P)) { //temp for left trigger
+				Debug.Log ("player 2 pressed");
 				playerInstruc [1].text = "ready!!";
 				playerInstrucArrows[1].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
 				if (onePlayerPressed) {
@@ -121,6 +123,7 @@ public class Manager : MonoBehaviour {
 		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90f);
 		timeLeft = (float)timeMax;
 		totalScore = 0;
+		onePlayerPressed = false;
 		for (int i=0; i<numPlayers; i++){
 			score[i]=0;
 		}
