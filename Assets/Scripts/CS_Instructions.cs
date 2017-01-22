@@ -24,13 +24,13 @@ public class CS_Instructions : MonoBehaviour {
 
 
 		if (Xbox_360_Controller == true) {
-			Debug.Log ("controller");
+//			Debug.Log ("controller");
 			//do something
 			xBox.SetActive(true);
 			keyboard.SetActive (false);
 		}
 		else {
-			Debug.Log ("keyboard");
+//			Debug.Log ("keyboard");
 			//do something
 			xBox.SetActive(false);
 			keyboard.SetActive (true);
