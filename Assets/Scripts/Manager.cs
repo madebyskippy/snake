@@ -35,11 +35,13 @@ public class Manager : MonoBehaviour {
 	public GameObject ballSample;
 	public Vector3 ballStartPosition;
 	GameObject[] currentBalls;
+	public GameObject[] particles = new GameObject[2];
 
 	//input stuff
 	public GameObject[] keys = new GameObject[10]; //for now
 	int[] keyNum;// = new int[5]; //keeps track of the letters (since it doesn't go in order)
 	bool onePlayerPressed;
+	private string myControllerSuffix = "";
 
 	AudioSource audioSource;
 
@@ -57,23 +59,27 @@ public class Manager : MonoBehaviour {
 		onePlayerPressed = false;
 
 		audioSource = GetComponent<AudioSource>();
+
+		if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer) {
+			myControllerSuffix += "Mac";
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (mode == 0) { //menu state
-			if (Input.GetKeyDown (KeyCode.Q)) { //temp for right trigger
+			if (Input.GetButton("SubmitA"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.Q)) { //temp for right trigger
 				playerInstruc [0].text = "ready!!";
-				playerInstrucArrows[0].transform.DOScale(new Vector3(0f,0f,0f),0.25f);
+				playerInstrucArrows[0].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
 				if (onePlayerPressed) {
 					Invoke ("startGame", 1.0f);
 				} else {
 					onePlayerPressed = true;
 				}
 			}
-			if (Input.GetKeyDown (KeyCode.P)) { //temp for left trigger
+			if (Input.GetButton("SubmitB"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.P)) { //temp for left trigger
 				playerInstruc [1].text = "ready!!";
-				playerInstrucArrows[1].transform.DOScale(new Vector3(0f,0f,0f),0.25f);
+				playerInstrucArrows[1].transform.DOScale(new Vector3(1f,0f,0f),0.15f);
 				if (onePlayerPressed) {
 					Invoke ("startGame", 1.0f);
 				} else {
@@ -108,6 +114,10 @@ public class Manager : MonoBehaviour {
 
 	void reset(){
 		//		end.text = "";
+		playerInstruc [0].text = "ready?";
+		playerInstruc [1].text = "ready?";
+		playerInstrucArrows[0].transform.localScale = new Vector3(1f,1f,1f);
+		playerInstrucArrows[1].transform.localScale = new Vector3(1f,1f,1f);
 		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90f);
 		timeLeft = (float)timeMax;
 		totalScore = 0;
@@ -141,7 +151,7 @@ public class Manager : MonoBehaviour {
 		instructions.SetActive (true);
 		title.SetActive(true);
 //		scorePie.transform.localScale = new Vector3 (2.5f, 2.5f, 2.5f);
-		scorePie.transform.DOScale (new Vector3 (2.5f, 2.5f, 2.5f),0.5f);
+		scorePie.transform.DOScale (new Vector3 (1.75f, 1.75f, 1.75f),0.5f);
 //		end.text = "game over \n \n S P A C E  to play again";
 		for (int i = 0; i < currentBalls.Length; i++) {
 			Destroy (currentBalls [i]);
@@ -149,18 +159,20 @@ public class Manager : MonoBehaviour {
 	}
 
 	void makeBall(int team){
-		currentBalls [team] = Instantiate (ballSample, ballStartPosition + new Vector3(12f*team,0f,0f), Quaternion.identity) as GameObject;
+		currentBalls [team] = Instantiate (ballSample, ballStartPosition + new Vector3(12f-12f*team,0f,0f), Quaternion.identity) as GameObject;
 		currentBalls [team].GetComponent<Ball> ().setTeam (team,playerColors[team]);
 	}
 
 	//ball fell out of bounds
 	public void BallFell(int team){
+		Instantiate (particles [team], currentBalls [team].transform.position, Quaternion.identity);
 		Destroy (currentBalls [team]);
 		makeBall (team);
 	}
 
 	public void scored(int team){
 		audioSource.Play ();
+		Instantiate (particles [team], currentBalls [team].transform.position, Quaternion.identity);
 		Destroy (currentBalls [team]);
 		makeBall (team);
 		score [team] += 1;

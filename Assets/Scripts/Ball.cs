@@ -37,6 +37,7 @@ public class Ball : MonoBehaviour {
 		team = t;
 		//set sprite color
 		GetComponent<SpriteRenderer>().color = c;
+		GetComponent<TrailRenderer> ().startColor = c;
 	}
 
 	void OnCollisionEnter2D(Collision2D collider){
