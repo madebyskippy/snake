@@ -8,7 +8,15 @@ public class Ball : MonoBehaviour {
 	public int team; //which player the ball is for
 	AudioSource audioSource;
 	private bool justPlayedHit;
-	[SerializeField] AudioClip hit;
+	[SerializeField] AudioClip hit1;
+	[SerializeField] AudioClip hit2;
+	[SerializeField] AudioClip hit3;
+	[SerializeField] AudioClip hit4;
+	[SerializeField] AudioClip hit5;
+	[SerializeField] AudioClip hit6;
+	[SerializeField] AudioClip hit7;
+	[SerializeField] AudioClip hit8;
+
 
 
 	// Use this for initialization
@@ -38,18 +46,46 @@ public class Ball : MonoBehaviour {
 		}
 		if (collider.gameObject.tag == "Basket") {
 			if (transform.position.y > collider.gameObject.transform.position.y) {
-				Debug.Log("hit basket");
+//				Debug.Log("hit basket");
 				manager.SendMessage ("scored", team);
 
 			}
 		}
 		if (collider.gameObject.tag == "Snake" || collider.gameObject.tag == "Ball") {
 			if (justPlayedHit == false) {
-				audioSource.clip = hit;
-				justPlayedHit = true;
-				audioSource.pitch = Random.Range (1f, 1.3f);
-				audioSource.Play (); 
-				Invoke("ResetJustPlayed", 0.5f);
+
+//				Camera.main.WorldToViewportPoint (transform.position);
+
+				if (transform.position.x <= -9f) {
+					CS_AudioManager.Instance.PlaySFX (hit1);
+				}
+				else if (transform.position.x <= -6f) {
+					CS_AudioManager.Instance.PlaySFX (hit2);
+				}
+				else if (transform.position.x <= -3f) {
+					CS_AudioManager.Instance.PlaySFX (hit3);
+				}
+				else if (transform.position.x <= 0f) {
+					CS_AudioManager.Instance.PlaySFX (hit4);
+				}
+				else if (transform.position.x <= 3f) {
+					CS_AudioManager.Instance.PlaySFX (hit5);
+				}
+				else if (transform.position.x <= 6f) {
+					CS_AudioManager.Instance.PlaySFX (hit6);
+				}
+				else if (transform.position.x <= 9f) {
+					CS_AudioManager.Instance.PlaySFX (hit7);
+				}
+				else {
+					CS_AudioManager.Instance.PlaySFX (hit8);
+				}
+
+					justPlayedHit = true;
+					audioSource.pitch = Random.Range (1f, 1.3f);
+					 
+					Invoke ("ResetJustPlayed", 0.5f);
+				 
 			}
 		}
 	}
