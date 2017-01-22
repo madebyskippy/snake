@@ -18,6 +18,7 @@ public class CS_Snake : MonoBehaviour {
 	[SerializeField] float myAnchorMovement_Ratio = 2;
 
 	private List<GameObject> myAnchors = new List<GameObject> ();
+	private List<bool> myAnchorsIsPulling = new List<bool> ();
 
 	private GameObject[] keyAnchors = new GameObject[10];
 	private bool[] keyAnchorsIsPulling = new bool[10];
@@ -69,6 +70,8 @@ public class CS_Snake : MonoBehaviour {
 //			t_Anchor.GetComponent<SpringJoint2D> ().connectedAnchor = Vector3.zero;
 
 			myAnchors.Add (t_Anchor);
+			bool t_isPulling = false;
+			myAnchorsIsPulling.Add (t_isPulling);
 		}
 
 		for (int i = 0; i < keyAnchors.Length; i++) {
@@ -107,7 +110,10 @@ public class CS_Snake : MonoBehaviour {
 			//myAnchors [i].GetComponent<SpriteRenderer> ().color = Color.black;
 			myAnchors [i].GetComponent<SpringJoint2D> ().distance = myAnchorDeltaPositionY +
 				myAnchorMovement_Amplitude * Mathf.Sin (myAnchorMovement_Ratio * (Time.time / myAnchorMovement_Period - i / (float)myBodyTotal));
-
+			if (myAnchorsIsPulling [i] == true) {
+				myAnchors [i].GetComponent<SpringJoint2D> ().distance = 
+					myAnchors [i].GetComponent<SpringJoint2D> ().distance - keyPullLength;
+			}
 //			Debug.Log (myAnchors [i].GetComponent<SpringJoint2D> ().distance);
 		}
 
@@ -121,6 +127,18 @@ public class CS_Snake : MonoBehaviour {
 
 	public List<GameObject> GetBodyParts () {
 		return myBodyParts;
+	}
+
+	public List<GameObject> GetAnchors () {
+		return myAnchors;
+	}
+
+	public void PullAnchor (int g_number) {
+		myAnchorsIsPulling [g_number] = true;
+	}
+
+	public void ReleaseAnchor (int g_number) {
+		myAnchorsIsPulling [g_number] = false;
 	}
 
 	public void PullSpring (int g_key) {
