@@ -29,7 +29,11 @@ public class Menu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		playerScore [1].text = ""+SnakeData.Instance.getScore (0);	
-		playerScore [0].text = ""+SnakeData.Instance.getScore (1);		
+		playerScore [0].text = ""+SnakeData.Instance.getScore (1);	
+
+		if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer) {
+			myControllerSuffix = "Mac";
+		}
 	}
 	
 	// Update is called once per frame
