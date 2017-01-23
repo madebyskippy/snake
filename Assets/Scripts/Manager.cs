@@ -20,12 +20,13 @@ public class Manager : MonoBehaviour {
 	public GameObject scorePie;
 	public GameObject scorePiece;
 	public Text time;
+	public Text end;
 
 	[SerializeField] AudioClip marimba;
 	[SerializeField] AudioClip bass;
 
 	//time stuff
-	int timeMax = 60; //in seconds
+	int timeMax = 10; //in seconds
 	float timeLeft;
 
 	//ball stuff
@@ -47,11 +48,12 @@ public class Manager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 //		backgroundKeyboard.SetActive(false);
+		end.text="";
 		snake = GameObject.Find ("Snake");
 		currentBalls = new GameObject[numPlayers];
 //		score = new int[numPlayers];
 		reset ();
-		timeLeft = 60f;//(float)timeMax;
+		timeLeft = (float)timeMax;
 
 		audioSource = GetComponent<AudioSource>();
 
@@ -72,13 +74,13 @@ public class Manager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		timeLeft -= Time.deltaTime;
-		if (timeLeft < 10) {
-			time.text = "0:0"+(int)timeLeft;
-		} else {
-			time.text = "0:"+(int)timeLeft;
-		}
 		if (timeLeft < 0) {
-			endGame ();
+			time.text = "0:00";
+			endGame();
+		} else if(timeLeft < 10){
+			time.text = "0:0"+(int)timeLeft;
+		}else {
+			time.text = "0:"+(int)timeLeft;
 		}
 	}
 
@@ -92,6 +94,22 @@ public class Manager : MonoBehaviour {
 	}
 
 	void endGame(){
+		if (SnakeData.Instance.getScore(0)<SnakeData.Instance.getScore(1)){
+			end.text = "red wins!";			
+		}else if(SnakeData.Instance.getScore(0)>SnakeData.Instance.getScore(1)){
+			end.text = "blue wins!";			
+		}else{
+			end.text = "- tie -";			
+		}
+		basket.SetActive (false);
+		for (int i = 0; i < currentBalls.Length; i++) {
+			currentBalls [i].SetActive (false);
+		}
+		Invoke ("switchScene", 3.0f);
+	}
+
+	void switchScene(){
+		Debug.Log ("switching scene");
 		SceneManager.LoadScene("Menu");
 	}
 
