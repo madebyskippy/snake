@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CS_Controller : MonoBehaviour {
+
+
 	[SerializeField] CS_Snake mySnake;
 	[SerializeField] int myPlayerNumber;
 	[SerializeField] GameObject mySelection;
@@ -14,8 +16,19 @@ public class CS_Controller : MonoBehaviour {
 	[SerializeField] float mySpeed = 0.02f; //How many time does it take to move to the next point
 	private float myAccumulation = 0;
 
+	void Awake () {
+		GameObject t_myGameObject = GameObject.Find (this.name);
+		if (t_myGameObject != null && t_myGameObject != this.gameObject) {
+			Destroy(this.gameObject);
+		}
+
+		DontDestroyOnLoad(this.gameObject);
+	}
+
 	// Use this for initialization
 	void Start () {
+		mySnake = GameObject.Find ("Snake").GetComponent<CS_Snake>();
+
 		justPlayedSideSound = false;
 		myStep = 0;
 		mySelection = Instantiate (mySelection, this.transform);
@@ -35,6 +48,10 @@ public class CS_Controller : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 //		Debug.Log ("Horizontal" + myControllerSuffix);
+
+		if (mySnake == null) {
+			mySnake = GameObject.Find ("Snake").GetComponent<CS_Snake>();
+		}
 
 		Input.GetAxisRaw ("Horizontal" + myControllerSuffix);
 
