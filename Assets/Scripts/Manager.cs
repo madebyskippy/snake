@@ -51,7 +51,7 @@ public class Manager : MonoBehaviour {
 		currentBalls = new GameObject[numPlayers];
 //		score = new int[numPlayers];
 		reset ();
-		timeLeft = 5f;//(float)timeMax;
+		timeLeft = 60f;//(float)timeMax;
 
 		audioSource = GetComponent<AudioSource>();
 
