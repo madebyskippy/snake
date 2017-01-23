@@ -23,7 +23,7 @@ public class CS_Instructions : MonoBehaviour {
 			if (names[x].Length == 55) {
 				Debug.Log ("XBOX 360 CONTROLLER IS CONNECTED");
 				Xbox_360_Controller = true;
-			}else if(names[x].Length == 0){ //LAURENZ CHANGE THIS 0 TO A NUMBER
+			}else if(names[x].Length == 50){ //LAURENZ CHANGE THIS 0 TO A NUMBER
 				Debug.Log ("PS4 CONTROLLER IS CONNECTED");
 				PS4_Controller = true;
 			}
