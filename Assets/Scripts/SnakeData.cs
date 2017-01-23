@@ -45,4 +45,10 @@ public class SnakeData : MonoBehaviour {
 	public int getScore(int team){
 		return score [team];
 	}
+
+	public void resetScore(){
+		for (int i = 0; i < score.Length; i++) {
+			score [i] = 0;
+		}
+	}
 }

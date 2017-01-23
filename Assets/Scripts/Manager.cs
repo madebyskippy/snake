@@ -62,6 +62,8 @@ public class Manager : MonoBehaviour {
 		aPressed = false;
 		bPressed = false;
 
+		SnakeData.Instance.resetScore ();
+
 		for (int i = 0; i < numPlayers; i++) {
 			makeBall (i);
 		}
