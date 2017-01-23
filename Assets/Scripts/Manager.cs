@@ -114,9 +114,9 @@ public class Manager : MonoBehaviour {
 		Destroy (currentBalls [team]);
 		makeBall (team);
 //		score [team] += 1;
-		SnakeData.Instance.increaseScore (1-team);
+		SnakeData.Instance.increaseScore (team);
 		totalScore += 1;
-		playerInstruc [team].text = "" + SnakeData.Instance.getScore (team);//score [team];
+		playerInstruc [1-team].text = "" + SnakeData.Instance.getScore (team);//score [team];
 		float targetAngle =  180f *  SnakeData.Instance.getScore (0) / totalScore;
 		scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, targetAngle);
 		Sequence sq = DOTween.Sequence();
