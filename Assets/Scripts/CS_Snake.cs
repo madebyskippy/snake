@@ -200,14 +200,8 @@ public class CS_Snake : MonoBehaviour {
 //		myBodyParts[g].GetComponent<SpriteRenderer>().color = new Color(149f/255f,255f/255f,182f/255f,1f);
 		myBodyParts[g].transform.localScale = new Vector3(1.5f,1.5f,1f);
 		myBodyParts[g].transform.DOScale (new Vector3(1f,1f,1f),0.25f);
-//		StartCoroutine(normalColorSnakePart(g, 0.25f));
 	}
 
-	IEnumerator normalColorSnakePart(int g, float delayTime){
-		yield return new WaitForSeconds(delayTime);
-//		myBodyParts[g].GetComponent<SpriteRenderer>().color = new Color(109f/255f,215f/255f,142f/255f,1f);
-		myBodyParts[g].transform.localScale = new Vector3(1f,1f,1f);
-	}
 
 	public void Blinking(){
 		float rate = UnityEngine.Random.Range (1, 4);
