@@ -39,13 +39,13 @@ public class CS_Instructions : MonoBehaviour {
 		PS4_Controller = false;
 		for (int x = 0; x < names.Length; x++)
 		{
-			Debug.Log (names [x].Length);
-			if (names[x].Length == 55) {
+			Debug.Log (names [x]);
+			if (names[x].IndexOf("360") != -1) {
 				Debug.Log ("XBOX 360 CONTROLLER IS CONNECTED");
 				Xbox_360_Controller = true;
 			}
 
-			if(names[x].Length == 50){ //LAURENZ CHANGE THIS 0 TO A NUMBER
+			if(names[x].IndexOf("Sony") != -1){ //LAURENZ CHANGE THIS 0 TO A NUMBER
 				Debug.Log ("PS4 CONTROLLER IS CONNECTED");
 				PS4_Controller = true;
 			}
