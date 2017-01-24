@@ -30,6 +30,11 @@ public class Menu : MonoBehaviour {
 	void Start () {
 		playerScore [1].text = ""+SnakeData.Instance.getScore (0);	
 		playerScore [0].text = ""+SnakeData.Instance.getScore (1);	
+		int totalScore = (SnakeData.Instance.getScore (0)+SnakeData.Instance.getScore (1));
+		float targetAngle = 180f * SnakeData.Instance.getScore (0) / totalScore;
+		if (totalScore != 0) {
+			scorePiece.transform.rotation = Quaternion.Euler(0.0f, 0.0f, targetAngle);
+		}
 
 		if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer) {
 			myControllerSuffix = "Mac";
