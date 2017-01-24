@@ -31,13 +31,25 @@ public class Menu : MonoBehaviour {
 		playerScore [1].text = ""+SnakeData.Instance.getScore (0);	
 		playerScore [0].text = ""+SnakeData.Instance.getScore (1);	
 
-		if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer) {
-			myControllerSuffix = "Mac";
-		}
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.OSXPlayer) {
+			myControllerSuffix = "Mac";
+
+			string[] names = Input.GetJoystickNames();
+			for (int x = 0; x < names.Length; x++)
+			{
+				if(names[x].Length == 50){ //LAURENZ CHANGE THIS 0 TO A NUMBER
+					Debug.Log ("PS4 CONTROLLER IS CONNECTED");
+					myControllerSuffix = "";
+					break;
+				}
+			}
+		}
+
 		if (Input.GetButtonDown("SubmitA"+myControllerSuffix)){//Input.GetKeyDown (KeyCode.Q)) { //temp for right trigger
 			Debug.Log ("player 1 pressed");
 			playerInstruc [0].text = "ready!!";
