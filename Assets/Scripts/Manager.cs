@@ -26,7 +26,7 @@ public class Manager : MonoBehaviour {
 	[SerializeField] AudioClip bass;
 
 	//time stuff
-	int timeMax = 10; //in seconds
+	int timeMax = 60; //in seconds
 	float timeLeft;
 
 	//ball stuff
